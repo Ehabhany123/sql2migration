@@ -9,6 +9,8 @@ composer require yourvendor/sql-to-migration
 ```
 
 ## Useage
+```bash
 php spark sql2migration /path/to/database.sql
+```
 
 For details: [Documentation](docs.md)
