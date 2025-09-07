@@ -1,0 +1,40 @@
+{
+    "name": "bertugfahriozer/sql2migration",
+    "description": "A Spark command for CodeIgniter 4 that generates migration files from an SQL file, with support for foreign keys, triggers, and DB prefix.",
+    "type": "library",
+    "keywords": [
+        "codeigniter4",
+        "spark",
+        "migration",
+        "sql-to-migration"
+    ],
+    "homepage": "https://github.com/bertugfahriozer/sql2migration",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bertuğ Fahri ÖZER",
+            "email": "bertugfahriozer@gmail.com",
+            "homepage": "https://bertugfahriozer.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "codeigniter4/framework": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ext-ci4mssql2migration\\": "src/"
+        }
+    },
+    "extra": {
+        "codeigniter": {
+            "namespace": "bertugfahriozer\\sql2migration",
+            "commands": [
+                "bertugfahriozer\\sql2migration\\Commands\\SqlToMigration"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

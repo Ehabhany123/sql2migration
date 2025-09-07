@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL to Migration for CodeIgniter 4 - Documentation</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-dark: #123a49;
+            --primary: #2da592;
+            --primary-light: #8bcbb7;
+            --background: #f5faf6;
+        }
+
+        body {
+            background-color: var(--background);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            background-color: var(--primary-dark);
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 40px);
+            padding-top: 10px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-light);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 8px;
+            color: var(--primary-light);
+        }
+
+        /* Main content styling */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Header styling */
+        .doc-header {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Section styling */
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        /* Feature cards */
+        .feature-card {
+            border: none;
+            border-top: 4px solid var(--primary);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Code blocks */
+        .code-block {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .code-header {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        pre {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 0 5px 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            color: var(--primary-dark);
+        }
+
+        /* Alert boxes */
+        .alert-note {
+            border-left: 4px solid #0d6efd;
+            background-color: #e8f4fd;
+        }
+
+        .alert-warning {
+            border-left: 4px solid #ffc107;
+            background-color: #fff4e5;
+        }
+
+        /* Color utilities */
+        .bg-primary-light {
+            background-color: var(--primary-light);
+        }
+
+        .text-primary-dark {
+            color: var(--primary-dark);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4 sidebar sticky-top">
+                <div class="sidebar-sticky">
+                    <div class="text-center mb-4">
+                        <h3 class="text-white"><i class="bi bi-database"></i> SQL to Migration</h3>
+                        <p class="text-primary-light">CodeIgniter 4 Documentation</p>
+                    </div>
+
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#overview">
+                                <i class="bi bi-house"></i> Overview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#installation">
+                                <i class="bi bi-download"></i> Installation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#usage">
+                                <i class="bi bi-play-circle"></i> Usage
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">
+                                <i class="bi bi-star"></i> Features
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#examples">
+                                <i class="bi bi-code-slash"></i> Examples
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#troubleshooting">
+                                <i class="bi bi-wrench"></i> Troubleshooting
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#support">
+                                <i class="bi bi-life-preserver"></i> Support
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col-lg-9 col-md-8">
+                <div class="doc-header">
+                    <h1 class="text-primary-dark">SQL to Migration for CodeIgniter 4</h1>
+                    <p class="lead">Convert SQL dump files into CodeIgniter 4 migration files with ease.</p>
+                </div>
+
+                <!-- Overview Section -->
+                <section id="overview" class="section">
+                    <h2 class="text-primary"><i class="bi bi-house"></i> Overview</h2>
+                    <p>This package provides a Spark command to convert SQL dump files (e.g., from phpMyAdmin) into CodeIgniter 4 migration files. It supports table creation, foreign keys, triggers, and database prefixes.</p>
+
+                    <div class="alert alert-note d-flex align-items-center">
+                        <i class="bi bi-info-circle me-3 fs-4"></i>
+                        <div>
+                            <strong>Note:</strong> This tool simplifies the process of converting existing SQL databases into CodeIgniter 4 migrations, making database versioning and deployment much easier.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Section -->
+                <section id="installation" class="section">
+                    <h2 class="text-primary"><i class="bi bi-download"></i> Installation</h2>
+
+                    <h4 class="mt-4">1. Install via Composer</h4>
+                    <p>Add the package to your CodeIgniter 4 project:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>composer require yourvendor/sql-to-migration</code></pre>
+                    </div>
+
+                    <h4 class="mt-4">2. Configure Autoloading</h4>
+                    <p>Open <code>app/Config/Autoload.php</code> and add the package to the PSR-4 autoloading:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PHP</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>public $psr4 = [
+    APP_NAMESPACE => APPPATH,  // Existing namespaces
+    'Config'      => APPPATH . 'Config',
+    'YourVendor\SqlToMigration' => VENDORPATH . 'yourvendor/sql-to-migration/src',
+];</code></pre>
+                    </div>
+
+                    <div class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle me-3 fs-4"></i>
+                        <div>
+                            <strong>Important:</strong> Replace <code>yourvendor</code> with your actual vendor name (e.g., <code>acme</code>).
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4">3. Verify Command Availability</h4>
+                    <p>Check if the Spark command is registered:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>php spark list</code></pre>
+                    </div>
+
+                    <p>You should see <code>sql2migration</code> in the list.</p>
+                </section>
+
+                <!-- Usage Section -->
+                <section id="usage" class="section">
+                    <h2 class="text-primary"><i class="bi bi-play-circle"></i> Usage</h2>
+
+                    <p>To convert an SQL file into CodeIgniter 4 migration files:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>php spark sql2migration /path/to/your/database.sql</code></pre>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Input</h5>
+                            <p>Path to the SQL file (e.g., <code>/path/to/database.sql</code>)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Output</h5>
+                            <p>Migration files are generated in <code>app/Database/Migrations/</code></p>
+                        </div>
+                    </div>
+
+                    <p class="mt-4">Apply the migrations:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bash</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>php spark migrate</code></pre>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section id="features" class="section">
+                    <h2 class="text-primary"><i class="bi bi-star"></i> Features</h2>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-table"></i> Table Creation</h5>
+                                    <p class="card-text">Generates migration files from <code>CREATE TABLE</code> statements with various column types and constraints.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-link-45deg"></i> Foreign Keys</h5>
+                                    <p class="card-text">Converts <code>ALTER TABLE</code> foreign key definitions into separate migration files with various actions.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-lightning"></i> Triggers</h5>
+                                    <p class="card-text">Creates migration files for <code>CREATE TRIGGER</code> statements with different timing and event combinations.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-tag"></i> Prefix Support</h5>
+                                    <p class="card-text">Automatically strips table prefixes based on your CodeIgniter database configuration.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card feature-card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-bug"></i> Debugging</h5>
+                                    <p class="card-text">Provides detailed CLI logs for troubleshooting during the conversion process.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Examples Section -->
+                <section id="examples" class="section">
+                    <h2 class="text-primary"><i class="bi bi-code-slash"></i> Examples</h2>
+
+                    <h4 class="mt-4">Example SQL File</h4>
+                    <p>The following SQL file demonstrates the package's capabilities:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>SQL</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>CREATE TABLE `ci4ms_users` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `ci4ms_orders` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) UNSIGNED NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+ALTER TABLE `ci4ms_orders`
+  ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `ci4ms_users` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+CREATE TRIGGER `ci4ms_update_timestamp` BEFORE UPDATE ON `ci4ms_users` FOR EACH ROW SET NEW.updated_at = NOW();</code></pre>
+                    </div>
+
+                    <h4 class="mt-4">Generated Migration Files</h4>
+                    <p>Running the command produces the following migration files:</p>
+
+                    <h5>Table Migration</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PHP</span>
+                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code>&lt;?php
+namespace App\Database\Migrations;
+use CodeIgniter\Database\Migration;
+
+class CreateUsersTable extends Migration
+{
+    public function up()
+    {
+        $this->forge->addField([
+            'id' => [
+                'type' => 'INT',
+                'constraint' => '11',
+                'unsigned' => true,
+                'auto_increment' => true,
+            ],
+            'username' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
+        ]);
+        $this->forge->addKey('id', true);
+        $this->forge->createTable('users');
+    }
+
+    public function down()
+    {
+        $this->forge->dropTable('users');
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section id="troubleshooting" class="section">
+                    <h2 class="text-primary"><i class="bi bi-wrench"></i> Troubleshooting</h2>
+
+                    <div class="accordion mt-4" id="troubleshootingAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                    "Command Not Found" Error
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Ensure the namespace is correctly added in <code>app/Config/Autoload.php</code></li>
+                                        <li>Run <code>composer dump-autoload</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    Foreign Keys Not Parsed
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Verify the <code>ALTER TABLE</code> format in your SQL file</li>
+                                        <li>Check CLI output for debugging</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                    Table Prefix Issues
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>Ensure <code>database.default.DBPrefix</code> is correctly set in <code>.env</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                    Migration Errors
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li>If migrations fail, roll back with <code>php spark migrate:rollback</code></li>
+                                        <li>Verify the SQL file structure and syntax</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Support Section -->
+                <section id="support" class="section">
+                    <h2 class="text-primary"><i class="bi bi-life-preserver"></i> Support and Contribution</h2>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="bi bi-github me-2"></i> Report issues on GitHub:
+                                    <a href="https://github.com/bertugfahriozer/sql2migration" target="_blank">github.com/bertugfahriozer/sql2migration</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-code-square me-2"></i> Contribute via Pull Requests
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-shield me-2"></i> The package is licensed under the MIT License
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="mt-5 pt-4 border-top">
+                    <p class="text-center text-muted">SQL to Migration for CodeIgniter 4 - Documentation</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('pre');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            // Provide visual feedback
+            const originalHtml = button.innerHTML;
+            button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+
+            setTimeout(() => {
+                button.innerHTML = originalHtml;
+            }, 2000);
+        }
+
+        // Activate sidebar navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Scrollspy for sidebar
+            const sections = document.querySelectorAll('section');
+            window.addEventListener('scroll', function() {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
