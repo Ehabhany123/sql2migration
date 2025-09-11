@@ -3,12 +3,15 @@
 This package generates CodeIgniter 4 migration files from SQL dump files. It has support for foreign keys, triggers, and DB prefix.
 
 ## Install
+
 Install with Composer:
+
 ```bash
-composer require yourvendor/sql-to-migration
+composer require bertugfahriozer/sql2migration
 ```
 
 ## Useage
+
 ```bash
 php spark sql2migration /path/to/database.sql
 ```

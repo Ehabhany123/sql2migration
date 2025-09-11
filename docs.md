@@ -14,20 +14,8 @@ This package provides a Spark command to convert SQL dump files (e.g., from phpM
 ### 1. Install via Composer
 Add the package to your CodeIgniter 4 project:
 ```bash
-composer require yourvendor/sql-to-migration
+composer require bertugfahriozer/sql-to-migration
 ```
-
-### 2. Configure Autoloading
-Open `app/Config/Autoload.php` and add the package to the PSR-4 autoloading:
-```php
-public $psr4 = [
-    APP_NAMESPACE => APPPATH,  // Existing namespaces
-    'Config'      => APPPATH . 'Config',
-    'YourVendor\SqlToMigration' => VENDORPATH . 'yourvendor/sql-to-migration/src',
-];
-```
-
-**Note**: Replace `yourvendor` with your actual vendor name (e.g., `acme`).
 
 ### 3. Verify Command Availability
 Check if the Spark command is registered:
