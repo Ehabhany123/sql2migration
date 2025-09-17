@@ -4,286 +4,417 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQL to Migration for CodeIgniter 4 - Documentation</title>
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-dark: #123a49;
             --primary: #2da592;
             --primary-light: #8bcbb7;
-            --background: #f5faf6;
+            --light-bg: #f5faf6;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         body {
-            background-color: var(--background);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--primary-dark);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
         }
 
-        /* Sidebar styling */
-        .sidebar {
-            background-color: var(--primary-dark);
+        .navbar {
+            background: var(--gradient);
+            box-shadow: 0 4px 18px rgba(18, 58, 73, 0.15);
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            background: var(--gradient);
             color: white;
-            height: 100vh;
-            padding-top: 20px;
-            overflow-y: auto;
+            padding: 4rem 0;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 3rem;
+            text-align: center;
         }
 
-        .sidebar-sticky {
+        .hero h1 {
+            font-weight: 800;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(18, 58, 73, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            background: white;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(18, 58, 73, 0.15);
+        }
+
+        .card-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.3rem;
+            border-bottom: 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .section-title {
             position: relative;
-            top: 0;
-            height: calc(100vh - 40px);
-            padding-top: 10px;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0.5rem 1rem;
-            border-left: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link.active {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left: 3px solid var(--primary-light);
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 8px;
-            color: var(--primary-light);
-        }
-
-        /* Main content styling */
-        .main-content {
-            margin-left: 280px;
-            padding: 30px;
-            background-color: white;
-            min-height: 100vh;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        }
-
-        @media (max-width: 992px) {
-            .sidebar {
-                height: auto;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
-        /* Header styling */
-        .doc-header {
-            border-bottom: 2px solid var(--primary-light);
             padding-bottom: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+            font-weight: 700;
         }
 
-        /* Section styling */
-        .section {
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e9ecef;
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
         }
 
-        .section:last-child {
+        .code-block {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.8rem 0;
+            padding-left: 2.5rem;
+            position: relative;
+            border-bottom: 1px solid rgba(43, 165, 146, 0.1);
+        }
+
+        .feature-list li:last-child {
             border-bottom: none;
         }
 
-        /* Feature cards */
-        .feature-card {
-            border: none;
-            border-top: 4px solid var(--primary);
-            transition: transform 0.3s;
-            height: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Code blocks */
-        .code-block {
-            position: relative;
-            margin: 20px 0;
-        }
-
-        .code-header {
-            background-color: var(--primary-dark);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px 5px 0 0;
+        .feature-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
-        pre {
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-left: 4px solid var(--primary);
-            border-radius: 0 0 5px 5px;
-            overflow-x: auto;
+        .file-structure {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
         }
 
-        code {
+        .file-item {
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .file-item:before {
+            content: '📄';
+            position: absolute;
+            left: 0;
+        }
+
+        .folder {
+            font-weight: 600;
             color: var(--primary-dark);
+            margin-top: 0.8rem;
         }
 
-        /* Alert boxes */
-        .alert-note {
-            border-left: 4px solid #0d6efd;
-            background-color: #e8f4fd;
+        .folder:before {
+            content: '📁';
+            margin-right: 5px;
         }
 
-        .alert-warning {
-            border-left: 4px solid #ffc107;
-            background-color: #fff4e5;
+        .back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--gradient);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(18, 58, 73, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        /* Color utilities */
-        .bg-primary-light {
-            background-color: var(--primary-light);
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .text-primary-dark {
-            color: var(--primary-dark);
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(18, 58, 73, 0.4);
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            text-align: center;
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 2.5rem 0;
+                border-radius: 0 0 20px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-lg-3 col-md-4 sidebar sticky-top">
-                <div class="sidebar-sticky">
-                    <div class="text-center mb-4">
-                        <h3 class="text-white"><i class="bi bi-database"></i> SQL to Migration</h3>
-                        <p class="text-primary-light">CodeIgniter 4 Documentation</p>
-                    </div>
-
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#overview">
-                                <i class="bi bi-house"></i> Overview
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#installation">
-                                <i class="bi bi-download"></i> Installation
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#usage">
-                                <i class="bi bi-play-circle"></i> Usage
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#features">
-                                <i class="bi bi-star"></i> Features
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#examples">
-                                <i class="bi bi-code-slash"></i> Examples
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#troubleshooting">
-                                <i class="bi bi-wrench"></i> Troubleshooting
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#support">
-                                <i class="bi bi-life-preserver"></i> Support
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-database"></i> SQL to Migration
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#installation">Installation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#usage">Usage</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#examples">Examples</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#troubleshooting">Troubleshooting</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+    </nav>
 
-            <!-- Main content -->
-            <div class="col-lg-9 col-md-8">
-                <div class="doc-header">
-                    <h1 class="text-primary-dark">SQL to Migration for CodeIgniter 4</h1>
-                    <p class="lead">Convert SQL dump files into CodeIgniter 4 migration files with ease.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <i class="fas fa-bolt me-2"></i> CodeIgniter 4 SQL to Migration
+            </div>
+            <h1>Convert SQL to CodeIgniter Migrations</h1>
+            <p>An advanced CLI tool for converting SQL dump files into CodeIgniter 4 migration files with support for tables, foreign keys, and triggers.</p>
+            <a href="#usage" class="btn btn-light btn-lg px-4 py-2">
+                <i class="fas fa-play-circle me-2"></i> Get Started
+            </a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Overview Section -->
+        <section id="overview" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-info-circle me-2"></i> Overview
                 </div>
+                <div class="card-body">
+                    <h3 class="section-title">What is SQL to Migration?</h3>
+                    <p>The <code>SQL to Migration</code> is a CodeIgniter 4 CLI command designed to convert SQL dump files (e.g., from phpMyAdmin) into CodeIgniter 4 migration files. It supports table creation, foreign keys, triggers, and database prefixes.</p>
 
-                <!-- Overview Section -->
-                <section id="overview" class="section">
-                    <h2 class="text-primary"><i class="bi bi-house"></i> Overview</h2>
-                    <p>This package provides a Spark command to convert SQL dump files (e.g., from phpMyAdmin) into CodeIgniter 4 migration files. It supports table creation, foreign keys, triggers, and database prefixes.</p>
-
-                    <div class="alert alert-note d-flex align-items-center">
-                        <i class="bi bi-info-circle me-3 fs-4"></i>
+                    <div class="alert alert-primary d-flex align-items-center">
+                        <i class="fas fa-info-circle me-3 fs-4"></i>
                         <div>
                             <strong>Note:</strong> This tool simplifies the process of converting existing SQL databases into CodeIgniter 4 migrations, making database versioning and deployment much easier.
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <!-- Installation Section -->
-                <section id="installation" class="section">
-                    <h2 class="text-primary"><i class="bi bi-download"></i> Installation</h2>
+        <!-- Installation Section -->
+        <section id="installation" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-download me-2"></i> Installation
+                </div>
+                <div class="card-body">
+                    <h3 class="section-title">How to Install</h3>
 
                     <h4 class="mt-4">1. Install via Composer</h4>
                     <p>Add the package to your CodeIgniter 4 project:</p>
 
                     <div class="code-block">
-                        <div class="code-header">
-                            <span>Bash</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>composer require bertugfahriozer/sql2migration</code></pre>
+                        composer require bertugfahriozer/sql2migration
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
-                    
+
                     <h4 class="mt-4">2. Verify Command Availability</h4>
                     <p>Check if the Spark command is registered:</p>
 
                     <div class="code-block">
-                        <div class="code-header">
-                            <span>Bash</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>php spark list</code></pre>
+                        php spark list
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
 
                     <p>You should see <code>sql2migration</code> in the list.</p>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <!-- Usage Section -->
-                <section id="usage" class="section">
-                    <h2 class="text-primary"><i class="bi bi-play-circle"></i> Usage</h2>
-
+        <!-- Usage Section -->
+        <section id="usage" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-terminal me-2"></i> Usage
+                </div>
+                <div class="card-body">
+                    <h3 class="section-title">How to Use SQL to Migration</h3>
                     <p>To convert an SQL file into CodeIgniter 4 migration files:</p>
 
                     <div class="code-block">
-                        <div class="code-header">
-                            <span>Bash</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>php spark sql2migration /path/to/your/database.sql</code></pre>
+                        php spark sql2migration /path/to/your/database.sql
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
 
                     <div class="row mt-4">
@@ -300,83 +431,84 @@
                     <p class="mt-4">Apply the migrations:</p>
 
                     <div class="code-block">
-                        <div class="code-header">
-                            <span>Bash</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>php spark migrate</code></pre>
+                        php spark migrate
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <!-- Features Section -->
-                <section id="features" class="section">
-                    <h2 class="text-primary"><i class="bi bi-star"></i> Features</h2>
+        <!-- Features Section -->
+        <section id="features" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-star me-2"></i> Features
+                </div>
+                <div class="card-body">
+                    <h3 class="section-title">Key Features</h3>
 
                     <div class="row mt-4">
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card feature-card h-100">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-table"></i> Table Creation</h5>
-                                    <p class="card-text">Generates migration files from <code>CREATE TABLE</code> statements with various column types and constraints.</p>
+                                    <h5><i class="fas fa-table text-primary me-2"></i> Table Creation</h5>
+                                    <p class="mb-0">Generates migration files from <code>CREATE TABLE</code> statements with various column types and constraints.</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card feature-card h-100">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-link-45deg"></i> Foreign Keys</h5>
-                                    <p class="card-text">Converts <code>ALTER TABLE</code> foreign key definitions into separate migration files with various actions.</p>
+                                    <h5><i class="fas fa-link text-primary me-2"></i> Foreign Keys</h5>
+                                    <p class="mb-0">Converts <code>ALTER TABLE</code> foreign key definitions into separate migration files with various actions.</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card feature-card h-100">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-lightning"></i> Triggers</h5>
-                                    <p class="card-text">Creates migration files for <code>CREATE TRIGGER</code> statements with different timing and event combinations.</p>
+                                    <h5><i class="fas fa-bolt text-primary me-2"></i> Triggers</h5>
+                                    <p class="mb-0">Creates migration files for <code>CREATE TRIGGER</code> statements with different timing and event combinations.</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card feature-card h-100">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-tag"></i> Prefix Support</h5>
-                                    <p class="card-text">Automatically strips table prefixes based on your CodeIgniter database configuration.</p>
+                                    <h5><i class="fas fa-tag text-primary me-2"></i> Prefix Support</h5>
+                                    <p class="mb-0">Automatically strips table prefixes based on your CodeIgniter database configuration.</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card feature-card h-100">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-bug"></i> Debugging</h5>
-                                    <p class="card-text">Provides detailed CLI logs for troubleshooting during the conversion process.</p>
+                                    <h5><i class="fas fa-bug text-primary me-2"></i> Debugging</h5>
+                                    <p class="mb-0">Provides detailed CLI logs for troubleshooting during the conversion process.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <!-- Examples Section -->
-                <section id="examples" class="section">
-                    <h2 class="text-primary"><i class="bi bi-code-slash"></i> Examples</h2>
+        <!-- Examples Section -->
+        <section id="examples" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-code me-2"></i> Examples
+                </div>
+                <div class="card-body">
+                    <h3 class="section-title">Example Usage</h3>
 
                     <h4 class="mt-4">Example SQL File</h4>
                     <p>The following SQL file demonstrates the package's capabilities:</p>
 
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span>SQL</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>CREATE TABLE `ci4ms_users` (
+                    <div class="code-block"><pre>
+CREATE TABLE `ci4ms_users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
@@ -391,21 +523,19 @@ CREATE TABLE `ci4ms_orders` (
 ALTER TABLE `ci4ms_orders`
   ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`user_id`) REFERENCES `ci4ms_users` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
 
-CREATE TRIGGER `ci4ms_update_timestamp` BEFORE UPDATE ON `ci4ms_users` FOR EACH ROW SET NEW.updated_at = NOW();</code></pre>
+CREATE TRIGGER `ci4ms_update_timestamp` BEFORE UPDATE ON `ci4ms_users` FOR EACH ROW SET NEW.updated_at = NOW();
+</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
 
                     <h4 class="mt-4">Generated Migration Files</h4>
                     <p>Running the command produces the following migration files:</p>
 
                     <h5>Table Migration</h5>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span>PHP</span>
-                            <button class="btn btn-sm btn-light" onclick="copyCode(this)">
-                                <i class="bi bi-clipboard"></i> Copy
-                            </button>
-                        </div>
-                        <pre><code>&lt;?php
+                    <div class="code-block"><pre>
+&lt;?php
 namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 
@@ -433,13 +563,24 @@ class CreateUsersTable extends Migration
     {
         $this->forge->dropTable('users');
     }
-}</code></pre>
+}
+</pre>
+                        <button class="copy-btn" onclick="copyCode(this)">
+                            <i class="fas fa-copy me-1"></i> Copy
+                        </button>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <!-- Troubleshooting Section -->
-                <section id="troubleshooting" class="section">
-                    <h2 class="text-primary"><i class="bi bi-wrench"></i> Troubleshooting</h2>
+        <!-- Troubleshooting Section -->
+        <section id="troubleshooting" class="mb-5 animate">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-wrench me-2"></i> Troubleshooting
+                </div>
+                <div class="card-body">
+                    <h3 class="section-title">Common Issues and Solutions</h3>
 
                     <div class="accordion mt-4" id="troubleshootingAccordion">
                         <div class="accordion-item">
@@ -502,90 +643,121 @@ class CreateUsersTable extends Migration
                             </div>
                         </div>
                     </div>
-                </section>
-
-                <!-- Support Section -->
-                <section id="support" class="section">
-                    <h2 class="text-primary"><i class="bi bi-life-preserver"></i> Support and Contribution</h2>
-
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <i class="bi bi-github me-2"></i> Report issues on GitHub:
-                                    <a href="https://github.com/bertugfahriozer/sql2migration" target="_blank">github.com/bertugfahriozer/sql2migration</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="bi bi-code-square me-2"></i> Contribute via Pull Requests
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="bi bi-shield me-2"></i> The package is licensed under the MIT License
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <footer class="mt-5 pt-4 border-top">
-                    <p class="text-center text-muted">SQL to Migration for CodeIgniter 4 - Documentation</p>
-                </footer>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
 
-    <!-- Bootstrap & Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-md-start">
+                    <h5>SQL to Migration</h5>
+                    <p>A CodeIgniter 4 SQL to migration conversion tool</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>Made with <i class="fas fa-heart text-danger"></i> for the CodeIgniter community</p>
+                    <p>© <script>document.write(new Date().getFullYear())</script> - All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Copy code functionality
         function copyCode(button) {
-            const codeBlock = button.closest('.code-block').querySelector('pre');
-            const textArea = document.createElement('textarea');
-            textArea.value = codeBlock.textContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
+            const codeBlock = button.closest('.code-block');
+            let text = '';
 
-            // Provide visual feedback
-            const originalHtml = button.innerHTML;
-            button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+            // Handle both pre and non-pre code blocks
+            if (codeBlock.querySelector('pre')) {
+                text = codeBlock.querySelector('pre').textContent;
+            } else {
+                text = codeBlock.textContent;
+            }
 
-            setTimeout(() => {
-                button.innerHTML = originalHtml;
-            }, 2000);
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            });
         }
 
-        // Activate sidebar navigation
-        document.addEventListener('DOMContentLoaded', function() {
+        // Back to top button
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.animate');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease-out forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 18px rgba(18, 58, 73, 0.2)';
+            } else {
+                navbar.style.boxShadow = '0 4px 18px rgba(18, 58, 73, 0.15)';
+            }
+        });
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                });
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
             });
 
-            // Scrollspy for sidebar
-            const sections = document.querySelectorAll('section');
-            window.addEventListener('scroll', function() {
-                let current = '';
-
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 100) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
             });
         });
     </script>
